@@ -1,0 +1,22 @@
+{
+  "name": "culturebot",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Bot that gives you wholesome 6-digit culture codes",
+  "main": "index.ts",
+  "repository": "https://github.com/qweri0p/culturebot",
+  "author": "qweriop",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "typescript": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.5",
+    "eslint": "^8.54.0"
+  },
+  "scripts": {
+    "start": "rm -r dist && tsc && node dist/index.js",
+    "register": "rm -r dist && tsc && node dist/register.js"
+  }
+}
