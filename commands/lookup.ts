@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, CacheType, ChatInputCommandInteraction } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, CacheType, ChatInputCommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 export const data = new SlashCommandBuilder()
     .setName('lookup')
@@ -35,5 +35,18 @@ export const data = new SlashCommandBuilder()
                     if (culture.entry.note !== null) embed.addFields({name: 'Note', value: culture.entry.note, inline:true})
                 }
 
-        return interaction.editReply({embeds: [embed]})
+        const openButton = new ButtonBuilder()
+        .setLabel('Open')
+        .setURL(culture.entry.link)
+        .setStyle(ButtonStyle.Link)
+    
+        const wholesomeButton = new ButtonBuilder()
+            .setLabel('Wholesomelist.com')
+            .setURL("https://wholesomelist.com/list/"+culture.entry.uuid)
+            .setStyle(ButtonStyle.Link)
+    
+        const row = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(openButton,wholesomeButton)
+    
+        return interaction.editReply({embeds: [embed], components: [row]});
     }

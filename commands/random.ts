@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CacheType, ActionRowBuilder, BurstHandlerMajorIdKey } from "discord.js";
 
 export const data = new SlashCommandBuilder()
 	.setName('random')
@@ -23,5 +23,18 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
 		)
 	if (culture.entry.note !== null) embed.addFields({name: 'Note', value: culture.entry.note, inline:true})
 
-	return interaction.editReply({embeds: [embed]});
+	const openButton = new ButtonBuilder()
+		.setLabel('Open')
+		.setURL(culture.entry.link)
+		.setStyle(ButtonStyle.Link)
+
+	const wholesomeButton = new ButtonBuilder()
+		.setLabel('Wholesomelist.com')
+		.setURL("https://wholesomelist.com/list/"+culture.entry.uuid)
+		.setStyle(ButtonStyle.Link)
+
+	const row = new ActionRowBuilder<ButtonBuilder>()
+		.addComponents(openButton,wholesomeButton)
+
+	return interaction.editReply({embeds: [embed], components: [row]});
 }
