@@ -21,7 +21,7 @@ export const data = new SlashCommandBuilder()
             .setColor(0xED2553)
             if (culture.result === false) {
                 embed.setTitle("Not found ):")
-                    .setDescription('Try /unwholesome lookup')
+                return interaction.editReply({embeds: [embed]})
             } else {
                 embed.setTitle(item.title)
                     .setURL(item.link)
