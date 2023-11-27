@@ -40,7 +40,6 @@ export const data = new SlashCommandBuilder()
                             embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})
                         }
                     }
-                    embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})
                 }
             }
 
