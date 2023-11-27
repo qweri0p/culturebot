@@ -1,9 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType, APIApplicationCommandOptionChoice, ActionRowBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction } from "discord.js";
 
-const rawalldata = await fetch("https://wholesomelist.com/api/list")
-const alldata = await rawalldata.json()
-const list = alldata.table
-
 const tags = [
     "Anal","Childhood Friend", "Chubby", "Couple", "Coworker", "Dark Skin", "Demon Girl", "Elf", "Femdom", "Flat Chested", "Full Color",
     "Futanari", "Gender Bender", "Ghost Girl", "Group", "Gyaru", "Handholding", "High School", "Kemonomimi", "Kuudere", "Maid", "MILF", "Monster Boy",
@@ -16,11 +12,14 @@ export const data = new SlashCommandBuilder()
     .addNumberOption(option =>
         option.setName('tag')
             .setDescription('What kind of culture do you want?')
-            // .setRequired(true)
+            .setRequired(true)
             .setAutocomplete(true)
     )
 
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {
+    const rawalldata = await fetch("https://wholesomelist.com/api/list")
+    const alldata = await rawalldata.json()
+    const list = alldata.table
     const selectedTag = tags[interaction.options.getNumber('tag')!]
     const finalList: any[] = []
     list.forEach((element: { tags: string | string[]; }) => {
