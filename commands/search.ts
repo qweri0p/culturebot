@@ -29,7 +29,6 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
     //Select a piece of culture at random
     const selectedItem = finalList[Math.floor(Math.random()*finalList.length)]
 
-
     const embed = new EmbedBuilder()
         .setColor(0xED2553)
         .setTitle(selectedItem.title)
