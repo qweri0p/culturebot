@@ -1,0 +1,56 @@
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
+
+const tags = [
+    "Anal","Childhood Friend", "Chubby", "Couple", "Coworker", "Dark Skin", "Demon Girl", "Elf", "Femdom", "Flat Chested", "Full Color",
+    "Futanari", "Gender Bender", "Ghost Girl", "Group", "Gyaru", "Handholding", "High School", "Kemonomimi", "Kuudere", "Maid", "MILF", "Monster Boy",
+    "Monster Girl", "Parents", "Robot Girl", "Short", "Shy", "Tall", "Teacher", "Tomboy", "Tsundure", "Uncensored", "Yaoi", "Yuri"
+]
+
+export const data = new SlashCommandBuilder()
+    .setName('help')
+    .setDescription('How to use the culturebot.')
+    .addSubcommand(subcommand => 
+        subcommand.setName('search')
+            .setDescription('How the "search" command works.')
+    )
+    .addSubcommand(subcommand =>
+        subcommand.setName('lookup')
+            .setDescription('How the "lookup" command works.')    
+    )
+    .addSubcommand(subcommand =>
+        subcommand.setName('random')
+            .setDescription('How the "random" command works.')    
+    )
+
+export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {
+    const embed = new EmbedBuilder()
+    .setColor(0xED2553)
+
+    switch (interaction.options.getSubcommand()){
+        case 'search':
+            embed.setTitle('How the "search" command works.')
+                .addFields(
+                    {name: 'What it does', value: 'Returns a piece of culture that features the tag given by the user.'},
+                    {name: 'Possible Tags', value: tags.toString()}
+                )
+            break;
+
+        case 'lookup':
+            embed.setTitle('How the "lookup" command works.')
+                .addFields(
+                    {name: 'What it does', value: 'Returns data about the piece of culture requested.'},
+                    {name: 'What does it accept', value: 'It accepts NHentai codes, e-hentai codes and wholesomelist.com IDs.'},
+                    {name: 'Not found ):', value: 'That piece of culture could not be found on wholesomelist.com.'}
+                )
+            break;
+        
+        case 'random':
+            embed.setTitle('How the "random" command works.')
+                .addFields(
+                    {name: 'What it does', value: 'Returns a piece of culture from wholesomelist.com. Which means: no NTR, no underage, no rape, etc.'}
+                )
+            break;
+    }
+    
+    return interaction.editReply({embeds: [embed]})
+}

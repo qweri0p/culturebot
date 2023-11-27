@@ -27,6 +27,7 @@ client.once(Events.ClientReady, c => {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
+	await interaction.deferReply()
 
 	const command = commands.get(interaction.commandName);
 
@@ -36,7 +37,6 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 
 	try {
-		await interaction.deferReply()
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
@@ -44,6 +44,24 @@ client.on(Events.InteractionCreate, async interaction => {
 			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		} else {
 			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	}
+});
+
+client.on(Events.InteractionCreate, async interaction => {
+	if (interaction.isChatInputCommand()) {
+	} else if (interaction.isAutocomplete()) {
+		const command = commands.get(interaction.commandName);
+
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
+		}
+
+		try {
+			await command.autocomplete(interaction);
+		} catch (error) {
+			console.error(error);
 		}
 	}
 });

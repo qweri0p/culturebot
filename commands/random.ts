@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CacheType, ActionRowBuilder, BurstHandlerMajorIdKey } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CacheType, ActionRowBuilder } from "discord.js";
 
 export const data = new SlashCommandBuilder()
 	.setName('random')
@@ -23,9 +23,11 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
 	if (culture.entry.tags.length !== 0) embed.addFields({name: 'Tags', value: culture.entry.tags.toString()})
 	if (culture.entry.note !== null) embed.addFields({name: 'Note', value: culture.entry.note, inline:true})
 	if (culture.entry.parody !== null) embed.addFields({name: 'Parodies', value: culture.entry.parody.toString(), inline:true})
-	if (culture.entry.siteTags.characters.length !== 0) embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})
-
-
+	if (culture.entry.siteTags !== null) {
+		if (culture.entry.siteTags.characters.length !== 0) {
+			embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})		
+		}
+	}
 	const openButton = new ButtonBuilder()
 		.setLabel('Open')
 		.setURL(culture.entry.link)
