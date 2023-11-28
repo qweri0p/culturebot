@@ -16,7 +16,7 @@
     "eslint": "^8.54.0"
   },
   "scripts": {
-    "start": "rm -r dist && tsc && node dist/index.js",
-    "register": "rm -r dist && tsc && node dist/register.js"
+    "start": "tsc && node dist/index.js",
+    "register": "tsc && node dist/register.js"
   }
 }
