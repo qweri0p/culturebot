@@ -1,11 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
 
-const tags = [
-    "Anal","Childhood Friend", "Chubby", "Couple", "Coworker", "Dark Skin", "Demon Girl", "Elf", "Femdom", "Flat Chested", "Full Color",
-    "Futanari", "Gender Bender", "Ghost Girl", "Group", "Gyaru", "Handholding", "High School", "Kemonomimi", "Kuudere", "Maid", "MILF", "Monster Boy",
-    "Monster Girl", "Parents", "Robot Girl", "Short", "Shy", "Tall", "Teacher", "Tomboy", "Tsundure", "Uncensored", "Yaoi", "Yuri"
-]
-
 export const data = new SlashCommandBuilder()
     .setName('help')
     .setDescription('How to use the culturebot.')
