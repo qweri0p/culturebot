@@ -50,6 +50,14 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
                     {name: 'What it does', value: 'Returns a piece of culture from wholesomelist.com. Which means: no NTR, no underage, no rape, etc.'}
                 )
             break;
+        
+        default:
+            embed.setTitle('How to use the culturebot.')
+            .addFields(
+                    {name: 'Commands', value: '/random, /lookup and /search.'},
+                    {name: 'How each command works.', value: 'Use /help {command} for help with that command.'}
+                )
+            break;
     }
     
     return interaction.editReply({embeds: [embed]})
