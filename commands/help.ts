@@ -53,7 +53,7 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
         
         default:
             embed.setTitle('How to use the culturebot.')
-            .addFields(
+                .addFields(
                     {name: 'Commands', value: '/random, /lookup and /search.'},
                     {name: 'How each command works.', value: 'Use /help {command} for help with that command.'}
                 )

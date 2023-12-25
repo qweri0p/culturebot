@@ -19,34 +19,34 @@ export const data = new SlashCommandBuilder()
 
         const embed = new EmbedBuilder()
             .setColor(0xED2553)
-            if (culture.result === false) {
-                embed.setTitle("Not found ):")
-                return interaction.editReply({embeds: [embed]})
-            } else {
-                embed.setTitle(item.title)
-                    .setURL(item.link)
-                    .setDescription(item.nh === null ? "Not on NHentai." : /\d+/.exec(item.nh)!.toString())
-                    .setThumbnail(item.image)
-                    .addFields(
-                        {name: 'Pages', value: culture.entry.pages.toString()},
-                        {name: 'Author', value: culture.entry.author.toString(), inline: true},
-                    )
-                if (culture.entry.tags.length !== 0) embed.addFields({name: 'Tags', value: culture.entry.tags.toString(), inline: true})
-                if (culture.entry.note !== null) embed.addFields({name: 'Note', value: culture.entry.note})
-                if (culture.entry.parody !== null) embed.addFields({name: 'Parodies', value: culture.entry.parody.toString(), inline:true})
-                if (culture.entry.siteTags !== null) {
+        if (culture.result === false) {
+            embed.setTitle('ID '+id.toString()+' not found ):')
+            return interaction.editReply({embeds: [embed]})
+        } else {
+            embed.setTitle(item.title)
+                .setURL(item.link)
+                .setDescription(item.nh === null ? "Not on NHentai." : /\d+/.exec(item.nh)!.toString())
+                .setThumbnail(item.image)
+                .addFields(
+                    {name: 'Pages', value: culture.entry.pages.toString()},
+                    {name: 'Author', value: culture.entry.author.toString(), inline: true},
+                )
+            if (culture.entry.tags.length !== 0) embed.addFields({name: 'Tags', value: culture.entry.tags.toString(), inline: true})
+            if (culture.entry.note !== null) embed.addFields({name: 'Note', value: culture.entry.note})
+            if (culture.entry.parody !== null) embed.addFields({name: 'Parodies', value: culture.entry.parody.toString(), inline:true})
+            if (culture.entry.siteTags !== null) {
+                if (culture.entry.siteTags.characters.length !== 0) {
                     if (culture.entry.siteTags.characters.length !== 0) {
-                        if (culture.entry.siteTags.characters.length !== 0) {
-                            embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})
-                        }
+                        embed.addFields({name: 'Characters', value: culture.entry.siteTags.characters.toString(), inline: true})
                     }
                 }
             }
+        }
 
         const openButton = new ButtonBuilder()
-        .setLabel('Open')
-        .setURL(culture.entry.link)
-        .setStyle(ButtonStyle.Link)
+            .setLabel('Open')
+            .setURL(culture.entry.link)
+            .setStyle(ButtonStyle.Link)
     
         const wholesomeButton = new ButtonBuilder()
             .setLabel('Wholesomelist.com')
