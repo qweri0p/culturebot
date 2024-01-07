@@ -32,6 +32,7 @@ client.once(Events.ClientReady, c => {
 			const culture = await request.json()
 			const item:any = culture.entry
 			if (item.nh !== null) {
+				console.log(item.nh)
 				client.user?.setActivity(/\d+/.exec(item.nh)!.toString(), { type: ActivityType.Watching })
 				dothething = false
 			}
