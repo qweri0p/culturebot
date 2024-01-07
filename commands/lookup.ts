@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, CacheType, ChatInputCommandInteracti
 
 export const data = new SlashCommandBuilder()
     .setName('lookup')
+    .setNSFW()
     .setDescription('Get information about your culture.')
     .addNumberOption(option =>
         option.setName("code")

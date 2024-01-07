@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInpu
 
 export const data = new SlashCommandBuilder()
 	.setName('random')
+    .setNSFW()
 	.setDescription('Give me random wholesome culture.')
 
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {

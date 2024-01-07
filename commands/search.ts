@@ -8,6 +8,7 @@ const tags = [
 
 export const data = new SlashCommandBuilder()
     .setName('search')
+    .setNSFW()
     .setDescription('Get a random piece of culture which uses a certain tag.')
     .addNumberOption(option =>
         option.setName('tag')

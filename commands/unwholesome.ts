@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheTy
 
 export const data = new SlashCommandBuilder()
     .setName('unwholesome')
+    .setNSFW()
     .setDescription('Why unwholesome isn\'t here')
 
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {

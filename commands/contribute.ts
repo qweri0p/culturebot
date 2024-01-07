@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheTy
 
 export const data = new SlashCommandBuilder()
     .setName('contribute')
+    .setNSFW()
     .setDescription('How do I contribute to the culturebot?')
 
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {

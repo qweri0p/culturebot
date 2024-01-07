@@ -8,6 +8,7 @@ const tags = [
 
 export const data = new SlashCommandBuilder()
     .setName('help')
+    .setNSFW()
     .setDescription('How to use the culturebot.')
     .addSubcommand(subcommand => 
         subcommand.setName('search')

@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url'
@@ -23,6 +23,21 @@ for (const file of commandFiles) {
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
+	
+
+	setInterval(async () =>{
+		let dothething = true
+		while (dothething) {
+			const request = await fetch('https://wholesomelist.com/api/random')
+			const culture = await request.json()
+			const item:any = culture.entry
+			if (item.nh !== null) {
+				client.user?.setActivity(/\d+/.exec(item.nh)!.toString(), { type: ActivityType.Watching })
+				dothething = false
+			}
+		}
+	}, 60E3)
+
 });
 
 client.on(Events.InteractionCreate, async interaction => {
