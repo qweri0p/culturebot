@@ -14,6 +14,4 @@ RUN yarn
 
 COPY . /usr/src/app
 
-RUN yarn register
-
 CMD ["yarn", "start"]

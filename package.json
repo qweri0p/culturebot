@@ -16,6 +16,5 @@
   },
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "register": "tsc && node dist/register.js"
   }
 }
