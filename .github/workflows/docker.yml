@@ -23,4 +23,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: qweri0p/culturebot:latest
+          tags: ghcr.io/qweri0p/culturebot:latest
+          secrets: "github_token=${{ secrets.GITHUB_TOKEN }}"
