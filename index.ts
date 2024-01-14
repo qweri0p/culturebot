@@ -1,8 +1,18 @@
 import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
+import { register } from './register.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url'
-import cfg from './config.json' assert {type: "json"};
+
+//Load the login details
+const token = process.env.TOKEN
+const client_id = process.env.CLIENT_ID
+
+//Check if the details are there. If not, close.
+if (!token) {console.error('Please provide a discord bot token in the environment variable "TOKEN".'); process.exit()}
+if (!client_id) {console.error('Please provide the discord client_id from the same application as the bot in the environment variable "CLIENT_ID".'); process.exit()}
+
+await register(token, client_id) //actually register the commands
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -82,4 +92,4 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 });
 
-client.login(cfg.token);
+client.login(token);

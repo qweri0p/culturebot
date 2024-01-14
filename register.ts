@@ -1,10 +1,9 @@
 import { REST, Routes } from 'discord.js';
-import cfg from './config.json' assert {type: "json"};
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url';
 
-const commands = [];
+const commands:JSON[] = [];
 
 const filesPath = path.join(url.fileURLToPath(new URL('.', import.meta.url)), 'commands');
 const actualCommandFiles = fs.readdirSync(filesPath);
@@ -22,16 +21,17 @@ for (const file of commandFiles) {
 }
 
 // Construct and prepare an instance of the REST module
-const rest = new REST().setToken(cfg.token);
 
 // and deploy your commands!
-(async () => {
+export async function register(token: string, client_id: string) {
+    const rest = new REST().setToken(token);
+
     try {
         console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
-            Routes.applicationCommands(cfg.clientId),
+            Routes.applicationCommands(client_id),
             { body: commands }
         ) as string[];
 
@@ -40,4 +40,4 @@ const rest = new REST().setToken(cfg.token);
         // And of course, make sure you catch and log any errors!
         console.error(error);
     }
-})();
+};
