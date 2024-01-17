@@ -32,7 +32,7 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
             embed.setTitle('How the "search" command works.')
                 .addFields(
                     {name: 'What it does', value: 'Returns a piece of culture that features the tag given by the user.'},
-                    {name: 'Possible Tags', value: tags.toString()}
+                    {name: 'Possible Tags', value: tags.join(", ")}
                 )
             break;
 

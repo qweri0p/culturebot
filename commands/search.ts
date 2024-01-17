@@ -40,12 +40,12 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
 			{name: 'Pages', value: selectedItem.pages.toString()},
 			{name: 'Author', value: selectedItem.author.toString(), inline: true},
 		)
-	if (selectedItem.tags.length !== 0) embed.addFields({name: 'Tags', value: selectedItem.tags.toString()})
+	if (selectedItem.tags.length !== 0) embed.addFields({name: 'Tags', value: selectedItem.tags.join(", ")})
 	if (selectedItem.note !== null) embed.addFields({name: 'Note', value: selectedItem.note, inline:true})
 	if (selectedItem.parody !== null) embed.addFields({name: 'Parodies', value: selectedItem.parody.toString(), inline:true})
 	if (selectedItem.siteTags !== null) {
 		if (selectedItem.siteTags.characters.length !== 0) {
-			embed.addFields({name: 'Characters', value: selectedItem.siteTags.characters.toString(), inline: true})		
+			embed.addFields({name: 'Characters', value: selectedItem.siteTags.characters.join(", "), inline: true})		
 		}
 	}
     
