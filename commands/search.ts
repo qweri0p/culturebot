@@ -16,16 +16,37 @@ export const data = new SlashCommandBuilder()
             .setRequired(true)
             .setAutocomplete(true)
     )
-
+    .addNumberOption(option =>
+        option.setName('tag2')
+            .setDescription('What other kind of culture do you want?')
+            .setAutocomplete(true)
+    )
+    .addNumberOption(option =>
+        option.setName('tag3')
+            .setDescription('What other kind of culture do you want?')
+            .setAutocomplete(true)
+    )
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {
     const rawalldata = await fetch("https://wholesomelist.com/api/list")
     const alldata = await rawalldata.json()
     const list = alldata.table
     const selectedTag = tags[interaction.options.getNumber('tag')!]
+    const selectedTag2 = tags[interaction.options.getNumber('tag2')!]
+    const selectedTag3 = tags[interaction.options.getNumber('tag3')!]
+    const selectedTags = [selectedTag, selectedTag2, selectedTag3].filter(value => value !== undefined)
+    
     const finalList: any[] = []
-    list.forEach((element: { tags: string | string[]; }) => {
-        if (element.tags.includes(selectedTag)) finalList.push(element)
+    list.forEach((element: { tags: string[]; }) => {
+        if (selectedTags.every((item) => element.tags.includes(item))) finalList.push(element)
     });
+
+    if (finalList.length === 0) {
+        const failembed = new EmbedBuilder()
+            .setColor(0xED2553)
+            .setTitle("Culture not found ):")
+            .setDescription('There is no culture with the following tags: '+selectedTags.join(', '))
+        return interaction.editReply({ embeds:[failembed]})
+    }
 
     //Select a piece of culture at random
     const selectedItem = finalList[Math.floor(Math.random()*finalList.length)]
