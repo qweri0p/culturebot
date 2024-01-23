@@ -31,7 +31,7 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
         case 'search':
             embed.setTitle('How the "search" command works.')
                 .addFields(
-                    {name: 'What it does', value: 'Returns a piece of culture that features the tag given by the user.'},
+                    {name: 'What it does', value: 'Returns a piece of culture that features the tag(s) given by the user.'},
                     {name: 'Possible Tags', value: tags.join(", ")}
                 )
             break;
