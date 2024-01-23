@@ -13,7 +13,7 @@ Invite it using [this link](https://discord.com/api/oauth2/authorize?client_id=1
 ### 2. `/search [tag]`
 **Give a piece of _'culture'_ with a specified tag. Get a list of tags by running `/help search`.**
 ### 3. `/lookup [id]`
-**Retrieve a piece of culture based on ID.**
+**Retrieve a piece of culture based on ID. The "ID" can be either an Imgchest hash (i.e. https://www.imgchest.com/p/n87wezbg7xd has a hash code of n87wezbg7xd), an NHentai number, or an e-hentai gallery token (i.e. https://e-hentai.org/g/1360792/4361ae7e8b/ has a gallery token of 4361ae7e8b).**
 ## Self hosting
 When self hosting culturebot, I recommend running the bot's official docker image.
 
@@ -31,3 +31,6 @@ services:
       - CLIENT_ID=<INSERT CLIENT_ID>
     restart: unless-stopped
 ```
+
+## Contributing
+Feel free to open pull requests or issues on this github page.
