@@ -2,10 +2,20 @@
 
 This bot is NSFW. You've been warned.
 
+This bot returns an instance of *'culture'* from [a database of wholesome pieces of *'culture'*](https://wholesomelist.com). There is a plan for unwholesome *'culture'* but that is currently unimplemented (see #2).
+
 Invite it using [this link](https://discord.com/api/oauth2/authorize?client_id=1177354553956511764&permissions=0&scope=bot) or self host it.
 
+
+## Commands
+### 1. `/random`
+**Give a piece of _'culture'_ chosen at random.**
+### 2. `/search [tag]`
+**Give a piece of _'culture'_ with a specified tag. Get a list of tags by running `/help search`.**
+### 3. `/lookup [id]`
+**Retrieve a piece of culture based on ID.**
 ## Self hosting
-I reccommend running the bot's official docker image.
+When self hosting culturebot, I recommend running the bot's official docker image.
 
 `docker run -e TOKEN=<INSERT BOT TOKEN> -e CLIENT_ID=<INSERT CLIENT_ID> ghcr.io/qweri0p/culturebot`
 
