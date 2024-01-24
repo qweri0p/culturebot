@@ -3,6 +3,7 @@ import { register } from './register.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url'
+import { setupDB } from './lib/sequelize.js';
 
 //Load the login details
 const token = process.env.TOKEN
@@ -33,7 +34,7 @@ for (const file of commandFiles) {
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	
+	setupDB(c)
 
 	setInterval(async () =>{
 		let dothething = true
@@ -43,7 +44,7 @@ client.once(Events.ClientReady, c => {
 			const item:any = culture.entry
 			if (item.nh !== null) {
 				console.log(item.nh)
-				client.user?.setActivity(/\d+/.exec(item.nh)!.toString(), { type: ActivityType.Watching })
+				c.user.setActivity(/\d+/.exec(item.nh)!.toString(), { type: ActivityType.Watching })
 				dothething = false
 			}
 		}
