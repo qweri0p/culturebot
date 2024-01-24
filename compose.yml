@@ -23,13 +23,13 @@ services:
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_PW
+      - MYSQL_DATABASE=main
     healthcheck:
       test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
       interval: 15s
       retries: 5
     volumes:
       - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   adminer:
     image: adminer
