@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { Client } from "discord.js";
+import { Client, Guild } from "discord.js";
 
 const sequelize = new Sequelize('main', 'root', process.env.MYSQL_PW?.toString(), {
     host: 'db',
@@ -13,7 +13,7 @@ try {
     console.error('Unable to connect to the database:', error);
 }
 
-const Guild = sequelize.define('guild', {
+const GuildModel = sequelize.define('guild', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -33,11 +33,27 @@ const Guild = sequelize.define('guild', {
 })
 
 export async function setupDB(client:Client) {
-    await Guild.sync()
+    await GuildModel.sync()
     const guilds = client.guilds.cache.map((guild) => guild.id)
     const existingGuildsData = guilds.map((guild) => ({guildId:guild}))
 
-    Guild.bulkCreate(existingGuildsData, { ignoreDuplicates: true })
+    await GuildModel.bulkCreate(existingGuildsData, { ignoreDuplicates: true })
     console.log('Succesfully put all data about guilds in database.')
     
+}
+export async function addGuildToDb(guild:Guild) {
+    const guildData = ({guildId:guild.id})
+    await GuildModel.create(guildData, {ignoreDuplicates: true})
+}
+
+export async function removeGuildFromDb(guild:Guild) {
+    const tobedeleted = await GuildModel.findOne({
+        where: {
+            guildId: guild.id
+        }
+    })
+    if (tobedeleted !== null) await tobedeleted.destroy()
+    else {
+        console.error("Cannot find item in database to be deleted", guild.id)
+    }
 }

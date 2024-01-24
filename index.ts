@@ -3,7 +3,7 @@ import { register } from './register.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url'
-import { setupDB } from './lib/sequelize.js';
+import { addGuildToDb, removeGuildFromDb, setupDB } from './lib/sequelize.js';
 
 //Load the login details
 const token = process.env.TOKEN
@@ -85,6 +85,14 @@ client.on(Events.InteractionCreate, async interaction => {
 			console.error(error);
 		}
 	}
+});
+
+client.on(Events.GuildCreate, async guild =>{
+	await addGuildToDb(guild)
+});
+
+client.on(Events.GuildDelete, async guild =>{
+	await removeGuildFromDb(guild)
 });
 
 client.login(token);
