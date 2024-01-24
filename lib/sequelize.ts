@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { Client, Guild } from "discord.js";
+import { Client, Guild, Interaction, User } from "discord.js";
 
 const sequelize = new Sequelize('main', 'root', process.env.MYSQL_PW?.toString(), {
     host: 'db',
@@ -25,6 +25,10 @@ const GuildModel = sequelize.define('guild', {
         unique: true,
         allowNull: false
     },
+    requestCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     isBased: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -32,8 +36,26 @@ const GuildModel = sequelize.define('guild', {
     }
 })
 
+const UserModel = sequelize.define('user',{
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    userId: {
+        type: DataTypes.BIGINT,
+        unique: true,
+        allowNull: false
+    },
+    requestCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+})
+
 export async function setupDB(client:Client) {
-    await GuildModel.sync()
+    sequelize.sync()
     const guilds = client.guilds.cache.map((guild) => guild.id)
     const existingGuildsData = guilds.map((guild) => ({guildId:guild}))
 
@@ -56,4 +78,18 @@ export async function removeGuildFromDb(guild:Guild) {
     else {
         console.error("Cannot find item in database to be deleted", guild.id)
     }
+}
+
+export async function addCountToDb(interaction:Interaction) {
+    const [user] = await UserModel.findOrCreate({
+        where: { userId: interaction.user.id },
+        defaults: { userId: interaction.user.id }
+    });
+
+    await user.update({requestCount: await user.get('requestCount') as number +1})
+
+    if (interaction.guildId === null) return //If guildId === null then the interaction was made in a DM.
+
+    const guildEntry = await GuildModel.findOne({ where: { guildId: interaction.guildId } })
+    await guildEntry?.update({requestCount: await guildEntry.get('requestCount') as number +1})
 }

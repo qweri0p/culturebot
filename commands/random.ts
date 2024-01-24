@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CacheType, ActionRowBuilder } from "discord.js";
+import { addCountToDb } from "../lib/sequelize.js";
 
 export const data = new SlashCommandBuilder()
 	.setName('random')
@@ -9,7 +10,7 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
 	const request = await fetch('https://wholesomelist.com/api/random')
 	const culture = await request.json()
 	const item:entry = culture.entry
-	console.log(item)
+	addCountToDb(interaction)
 
 	const embed = new EmbedBuilder()
 		.setColor(0xED2553)

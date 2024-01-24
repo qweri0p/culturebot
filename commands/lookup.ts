@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, CacheType, ChatInputCommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { addCountToDb } from "../lib/sequelize.js";
 
 export const data = new SlashCommandBuilder()
     .setName('lookup')
@@ -16,7 +17,7 @@ export const data = new SlashCommandBuilder()
         const request = await fetch('https://wholesomelist.com/api/check?code='+id.toString())
         const culture = await request.json()
 	    const item:entry = culture.entry
-        console.log(culture)
+        addCountToDb(interaction)
 
         const embed = new EmbedBuilder()
             .setColor(0xED2553)

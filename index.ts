@@ -53,6 +53,7 @@ client.once(Events.ClientReady, c => {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (interaction.isChatInputCommand()) {
+		console.log(interaction)
 		await interaction.deferReply()
 
 		const command = commands.get(interaction.commandName);

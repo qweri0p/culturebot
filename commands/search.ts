@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType, ActionRowBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction } from "discord.js";
+import { addCountToDb } from "../lib/sequelize.js";
 
 const tags = [
     "Anal","Childhood Friend", "Chubby", "College", "Couple", "Coworker", "Dark Skin", "Demon Girl", "Elf", "Femdom", "Flat Chested", "Full Color",
@@ -47,6 +48,8 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
             .setDescription('There is no culture with the following tags: '+selectedTags.join(', '))
         return interaction.editReply({ embeds:[failembed]})
     }
+
+	addCountToDb(interaction)
 
     //Select a piece of culture at random
     const selectedItem = finalList[Math.floor(Math.random()*finalList.length)]
