@@ -56,7 +56,8 @@ const UserModel = sequelize.define('user',{
 })
 
 export async function setupDB(client:Client) {
-    sequelize.sync()
+    GuildModel.sync()
+    UserModel.sync()
     const guilds = client.guilds.cache.map((guild) => guild.id)
     const existingGuildsData = guilds.map((guild) => ({guildId:guild}))
 
