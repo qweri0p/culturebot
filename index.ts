@@ -1,5 +1,5 @@
 import { ActivityType, Client, Events, GatewayIntentBits } from 'discord.js';
-import { register } from './register.js';
+import { initialRegister, registerGuildCommands } from './register.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url'
@@ -12,8 +12,6 @@ const client_id = process.env.CLIENT_ID
 //Check if the details are there. If not, close.
 if (!token) {console.error('Please provide a discord bot token in the environment variable "TOKEN".'); process.exit()}
 if (!client_id) {console.error('Please provide the discord client_id from the same application as the bot in the environment variable "CLIENT_ID".'); process.exit()}
-
-await register(token, client_id) //actually register the commands
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -32,7 +30,8 @@ for (const file of commandFiles) {
 	}
 }
 
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, async c => {
+	await initialRegister(token, client_id) //actually register the commands
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 	setupDB(c)
 
@@ -53,7 +52,6 @@ client.once(Events.ClientReady, c => {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (interaction.isChatInputCommand()) {
-		console.log(interaction)
 		await interaction.deferReply()
 
 		const command = commands.get(interaction.commandName);
@@ -89,6 +87,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on(Events.GuildCreate, async guild =>{
 	await addGuildToDb(guild)
+	await registerGuildCommands(guild.id, token, client_id)
 });
 
 client.on(Events.GuildDelete, async guild =>{

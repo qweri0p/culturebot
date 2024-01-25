@@ -1,7 +1,15 @@
 import { REST, Routes } from 'discord.js';
+import { getGuildsFromDatabase, isGuildBased } from './lib/sequelize.js';
 import path from "node:path";
 import fs from 'node:fs';
 import url from 'node:url';
+
+const basedCommands = ['unwholesome']
+
+function filterCommands(commands:JSON[], basedCommands:string[], isBased:Boolean) {
+    // if (isBased) return commands
+    return commands
+}
 
 const commands:JSON[] = [];
 
@@ -23,21 +31,57 @@ for (const file of commandFiles) {
 // Construct and prepare an instance of the REST module
 
 // and deploy your commands!
-export async function register(token: string, client_id: string) {
-    const rest = new REST().setToken(token);
+export async function initialRegister(token: string, client_id: string) {
+    const guildData = await getGuildsFromDatabase()
+    const rest = new REST().setToken(token)
+    
+    for (let i = 0; i<guildData.length; i++){
+        try {
+            console.log(`Started refreshing ${commands.length} application (/) guildcommands in ` + guildData[i].guildId);
+            rest.put(Routes.applicationGuildCommands(client_id, guildData[i].guildId), { body: [] })
+                .then(() => console.log('Successfully deleted guildcommands in guild '+ guildData[i].guildId))
+                .catch(console.error);
+    
+            // The put method is used to fully refresh all commands in the guild with the current set
+            const commandData = filterCommands(commands, basedCommands, guildData[i].isBased)
+            const data = await rest.put(
+                Routes.applicationGuildCommands(client_id, guildData[i].guildId),
+                { body: commandData }
+            ) as string[];
+    
+            console.log(`Successfully created ${data.length} application (/) guildcommands in ` + guildData[i].guildId);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    console.log('Done with registering commands.')
+};
 
+export async function deleteGuildCommands(guildId:string, token:string, client_id:string) {
+    const rest = new REST().setToken(token)
     try {
-        console.log(`Started refreshing ${commands.length} application (/) commands.`);
-
-        // The put method is used to fully refresh all commands in the guild with the current set
-        const data = await rest.put(
-            Routes.applicationCommands(client_id),
-            { body: commands }
-        ) as string[];
-
-        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+        console.log(`Started refreshing ${commands.length} application (/) guildcommands in ` + guildId);
+        rest.put(Routes.applicationGuildCommands(client_id, guildId), { body: [] })
+            .then(() => console.log('Successfully deleted guildcommands in guild '+ guildId))
+            .catch(console.error);
+            
     } catch (error) {
-        // And of course, make sure you catch and log any errors!
         console.error(error);
     }
-};
+}
+
+export async function registerGuildCommands(guildId:string, token:string, client_id:string) {
+    const rest = new REST().setToken(token)
+    const basedness = await isGuildBased(guildId)
+    try {
+        const commandData = filterCommands(commands, basedCommands, basedness)
+            const data = await rest.put(
+                Routes.applicationGuildCommands(client_id, guildId),
+                { body: commandData }
+            ) as string[];
+    
+            console.log(`Successfully created ${data.length} application (/) guildcommands in ` + guildId);
+    } catch (error) {
+        console.error(error)
+    }
+}

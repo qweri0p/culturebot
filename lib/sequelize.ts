@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import { Client, Guild, Interaction, User } from "discord.js";
+import { fileURLToPath } from "node:url";
 
 const sequelize = new Sequelize('main', 'root', process.env.MYSQL_PW?.toString(), {
     host: 'db',
@@ -92,4 +93,24 @@ export async function addCountToDb(interaction:Interaction) {
 
     const guildEntry = await GuildModel.findOne({ where: { guildId: interaction.guildId } })
     await guildEntry?.update({requestCount: await guildEntry.get('requestCount') as number +1})
+}
+
+export async function getGuildsFromDatabase():Promise<any> {
+    const listOfGuilds = await GuildModel.findAll()
+    const filteredGuilds = listOfGuilds.map(instance => {
+        return {
+            guildId: instance.get('guildId'),
+            isBased: instance.get('isBased')
+        }
+    })
+    return filteredGuilds
+}
+
+export async function isGuildBased(guildId:string):Promise<any> {
+    const basedness = await GuildModel.findOne({
+        where: {
+            guildId: guildId
+        }
+    })
+    return basedness?.get('isBased')
 }
