@@ -3,7 +3,7 @@ name: Build and Publish Docker image
 on:
   push:
     branches:
-      - 'main'
+      - '*'
 
 jobs:
   docker:
@@ -21,5 +21,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/qweri0p/culturebot:latest
-          secrets: "github_token=${{ secrets.GITHUB_TOKEN }}"
+          tags: |
+            ghcr.io/qweri0p/culturebot:${{ github.ref_name }}
+            if: github.ref == 'refs/heads/main'
+              ghcr.io/qweri0p/culturebot:latest
+              
