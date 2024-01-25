@@ -31,9 +31,9 @@ for (const file of commandFiles) {
 }
 
 client.once(Events.ClientReady, async c => {
+	await setupDB(c)
 	await initialRegister(token, client_id) //actually register the commands
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	setupDB(c)
 
 	setInterval(async () =>{
 		let dothething = true
