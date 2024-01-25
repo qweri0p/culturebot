@@ -17,12 +17,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: name/app
+      -
         name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: |
-            ghcr.io/qweri0p/culturebot:${{ github.ref_name }}
-            if: github.ref == 'refs/heads/main'
-              ghcr.io/qweri0p/culturebot:latest
+          tags: ghcr.io/qweri0p/culturebot:${{ steps.meta.outputs.tags }}
               
