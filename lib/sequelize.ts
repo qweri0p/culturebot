@@ -96,7 +96,7 @@ export async function addCountToDb(interaction:Interaction) {
     await guildEntry?.update({requestCount: await guildEntry.get('requestCount') as number +1})
 }
 
-export async function getGuildsFromDatabase():Promise<any> {
+export async function getGuildsFromDatabase() {
     const listOfGuilds = await GuildModel.findAll()
     const filteredGuilds = listOfGuilds.map(instance => {
         return {

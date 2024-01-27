@@ -6,12 +6,16 @@ import url from 'node:url';
 
 const basedCommands = ['unwholesome']
 
-function filterCommands(commands:JSON[], basedCommands:string[], isBased:Boolean) {
-    // if (isBased) return commands
-    return commands
+interface crapobject extends JSON {
+    name: string
 }
 
-const commands:JSON[] = [];
+function filterCommands(commands:crapobject[], basedCommands:string[], isBased:Boolean) {
+    if (isBased) return commands
+    return commands.filter(obj => !basedCommands.includes(obj.name)) //doesn't work but this isn't the issue here somehow
+}
+
+const commands:any[] = [];
 
 const filesPath = path.join(url.fileURLToPath(new URL('.', import.meta.url)), 'commands');
 const actualCommandFiles = fs.readdirSync(filesPath);
@@ -32,24 +36,21 @@ for (const file of commandFiles) {
 
 // and deploy your commands!
 export async function initialRegister(token: string, client_id: string) {
-    const guildData = await getGuildsFromDatabase()
-    const rest = new REST().setToken(token)
+    const guildData = await getGuildsFromDatabase() as any
     
     for (let i = 0; i<guildData.length; i++){
         try {
-            console.log(`Started refreshing ${commands.length} application (/) guildcommands in ` + guildData[i].guildId);
-            rest.put(Routes.applicationGuildCommands(client_id, guildData[i].guildId), { body: [] })
-                .then(() => console.log('Successfully deleted guildcommands in guild '+ guildData[i].guildId))
-                .catch(console.error);
-    
-            // The put method is used to fully refresh all commands in the guild with the current set
             const commandData = filterCommands(commands, basedCommands, guildData[i].isBased)
-            const data = await rest.put(
+            console.log(`Started refreshing ${commandData.length} application (/) guildcommands in ` + guildData[i].guildId);
+            // The put method is used to fully refresh all commands in the guild with the current set
+            const rest = new REST().setToken(token)
+            await rest.put(
                 Routes.applicationGuildCommands(client_id, guildData[i].guildId),
                 { body: commandData }
-            ) as string[];
+            ).then(() => console.log(`Successfully created ${commandData.length} application (/) guildcommands in ` + guildData[i].guildId))
+            .catch(console.error);
+
     
-            console.log(`Successfully created ${data.length} application (/) guildcommands in ` + guildData[i].guildId);
         } catch (error) {
             console.error(error);
         }
