@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { Client, Guild, Interaction, User } from "discord.js";
-import { fileURLToPath } from "node:url";
+import { Client, Guild, Interaction } from "discord.js";
 
 const sequelize = new Sequelize('main', 'root', process.env.MYSQL_PW?.toString(), {
     host: 'db',
@@ -11,7 +10,7 @@ try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
 } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('what connect to the database:', error);
 }
 
 const GuildModel = sequelize.define('guild', {
@@ -55,6 +54,7 @@ const UserModel = sequelize.define('user',{
     },
 })
 
+//Create database tables
 export async function setupDB(client:Client) {
     GuildModel.sync()
     UserModel.sync()
@@ -63,13 +63,17 @@ export async function setupDB(client:Client) {
 
     await GuildModel.bulkCreate(existingGuildsData, { ignoreDuplicates: true })
     console.log('Succesfully put all data about guilds in database.')
-    
 }
+
+// Run this when the bot is added to a guild
+// Create a new entry into the database with the guild's ID as guildId
 export async function addGuildToDb(guild:Guild) {
     const guildData = ({guildId:guild.id})
     await GuildModel.create(guildData, {ignoreDuplicates: true})
 }
 
+// Run this when the bot is removed from a guild
+// Delete all data associated with the guild
 export async function removeGuildFromDb(guild:Guild) {
     const tobedeleted = await GuildModel.findOne({
         where: {
@@ -82,6 +86,7 @@ export async function removeGuildFromDb(guild:Guild) {
     }
 }
 
+// Add 1 to both the guild and the user's 'requestCount''
 export async function addCountToDb(interaction:Interaction) {
     const [user] = await UserModel.findOrCreate({
         where: { userId: interaction.user.id },
@@ -89,13 +94,11 @@ export async function addCountToDb(interaction:Interaction) {
     });
 
     await user.update({requestCount: await user.get('requestCount') as number +1})
-
-    if (interaction.guildId === null) return //If guildId === null then the interaction was made in a DM.
-
     const guildEntry = await GuildModel.findOne({ where: { guildId: interaction.guildId } })
     await guildEntry?.update({requestCount: await guildEntry.get('requestCount') as number +1})
 }
 
+// Get an array of guild Objects with the ID and the basedness
 export async function getGuildsFromDatabase() {
     const listOfGuilds = await GuildModel.findAll()
     const filteredGuilds = listOfGuilds.map(instance => {
@@ -107,6 +110,7 @@ export async function getGuildsFromDatabase() {
     return filteredGuilds
 }
 
+// Boolean: Is this guild with guildId x based
 export async function isGuildBased(guildId:string):Promise<any> {
     const basedness = await GuildModel.findOne({
         where: {
@@ -114,4 +118,24 @@ export async function isGuildBased(guildId:string):Promise<any> {
         }
     })
     return basedness?.get('isBased')
+}
+
+// Number: How much culture has been searched for by the members of the guild
+export async function getGuildUsageCount(guildId:string):Promise<any> {
+    const cultureCount = await GuildModel.findOne({
+        where: {
+            guildId: guildId
+        }
+    })
+    return cultureCount?.get('requestCount')
+}
+
+// Number: How much culture has been searched for by the user with userId x
+export async function getUserUsageCount(userId:string):Promise<any> {
+    const cultureCount = await UserModel.findOne({
+        where: {
+            userId: userIddId
+        }
+    })
+    return cultureCount?.get('requestCount')
 }

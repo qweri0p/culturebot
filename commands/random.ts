@@ -3,7 +3,7 @@ import { addCountToDb } from "../lib/sequelize.js";
 
 export const data = new SlashCommandBuilder()
 	.setName('random')
-    .setNSFW()
+	.setNSFW()
 	.setDescription('Give me random wholesome culture.')
 
 export async function execute(interaction:ChatInputCommandInteraction<CacheType>) {
