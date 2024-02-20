@@ -134,7 +134,7 @@ export async function getGuildUsageCount(guildId:string):Promise<any> {
 export async function getUserUsageCount(userId:string):Promise<any> {
     const cultureCount = await UserModel.findOne({
         where: {
-            userId: userIddId
+            userId: userId
         }
     })
     return cultureCount?.get('requestCount')
