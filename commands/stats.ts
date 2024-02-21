@@ -15,7 +15,7 @@ export async function execute(interaction:ChatInputCommandInteraction<CacheType>
         .setColor(0xED2553)
         .setFields(
             {name: 'User count:', value: interaction.user.displayName+' has used the bot '+userRequestCount+' times.'},
-            {name: 'Guild count:', value: interaction.guild?.name+' has used the bot '+guildRequestCount+' times.'}
+            {name: 'Server count:', value: interaction.guild?.name+' has used the bot '+guildRequestCount+' times.'}
         )
     
     return interaction.editReply({embeds: [embed]})
