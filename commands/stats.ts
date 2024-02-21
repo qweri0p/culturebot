@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
-import { getGuildUsageCount, getUserUsageCount } from "../lib/sequelize";
+import { getGuildUsageCount, getUserUsageCount } from "../lib/sequelize.js";
 
 export const data = new SlashCommandBuilder()
     .setName('stats')
