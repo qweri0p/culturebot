@@ -121,7 +121,7 @@ export async function isGuildBased(guildId:string):Promise<any> {
 }
 
 // Number: How much culture has been searched for by the members of the guild
-export async function getGuildUsageCount(guildId:string):Promise<any> {
+export async function getGuildUsageCount(guildId:any):Promise<any> {
     const cultureCount = await GuildModel.findOne({
         where: {
             guildId: guildId
